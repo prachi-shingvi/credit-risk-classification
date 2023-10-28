@@ -1,31 +1,32 @@
-# Module 12 Report Template
+# Challenge 20 : Credit Risk Classification using Logistic Regression
 
 ## Overview of the Analysis
 
-In this section, describe the analysis you completed for the machine learning models used in this Challenge. This might include:
+- In the given challenge, we were provided a dataset of historical lending activity from a peer-to-peer lending services company to build a model that can identify the creditworthiness of borrowers. We had to then split the data into 2 groups viz. training set and testing set to train the model and predict the testing set respectively.
+- The data contained important information regarding the borrower's loan size, interest rate, income, debt to income ratio, number of accounts, derogatory marks and current total debt of the borrower. With these parameters, we were given loan status denoted by 0(indicating healthy loan) and 1 (indicating high risk of defaulting) which was the binary prediction we had to make.
+- We used Pandas dataframes to read the csv and found that there were 75036 healthy loan samples and 2500 high risk ones using `value_counts`.
+- The following steps were taken to train and test the first model:
+  1. We split the data using `train_test_split` method inside `sklearn.model_selection`. We made sure we provided `stratify = y` to ensure the proportion of values of in y(75036:2500) is maintained in the training and test data. The `train_test_split` method returned training data(X_train, y_train) and testing data(X_test, y_test).
+  2. We created a logistic regression model using `sklearn.linear_model` python library's `LogisticRegression` method and used training data to fit the model.
+  3. We then used testing data(X_test) to predict the results(testing for loan status).
+  4. We evaluated the model's performance using balanced accuracy score, confusion matrix and classification report.
+- After this, we created another model to resolve imbalances in data by resampling using `RandomOverSampler`. This helped us receive 56277 samples to train our model. This method helped boost the accuracy of the model.
 
-* Explain the purpose of the analysis.
-* Explain what financial information the data was on, and what you needed to predict.
-* Provide basic information about the variables you were trying to predict (e.g., `value_counts`).
-* Describe the stages of the machine learning process you went through as part of this analysis.
-* Briefly touch on any methods you used (e.g., `LogisticRegression`, or any resampling method).
 
 ## Results
-
-Using bulleted lists, describe the balanced accuracy scores and the precision and recall scores of all machine learning models.
-
-* Machine Learning Model 1:
-  * Description of Model 1 Accuracy, Precision, and Recall scores.
-
+- Machine Learning Model 1(without using RandomOverSampler):
+1. Accuracy: We had **94.42%** accuracy
+2. Precision: For healthy loan(0), we had a precision of 1.00, however, for default risk loans(1), we had precision of 0.87
+3. Recall: For healthy loan(0), we had a recall of 1.00, however, for default risk loans(1), we had recall of 0.89
 
 
-* Machine Learning Model 2:
-  * Description of Model 2 Accuracy, Precision, and Recall scores.
+* Machine Learning Model 2(using RandomOverSampler):
+1. Accuracy: We had **99.59%** accuracy
+2. Precision: For healthy loan(0), we had a precision of 1.00, however, for default risk loans(1), we had precision of 0.87
+3. Recall: For healthy loan(0), we had a recall of 1.00, however, for default risk loans(1), we had recall of 1.00
 
 ## Summary
 
-Summarize the results of the machine learning models, and include a recommendation on the model to use, if any. For example:
-* Which one seems to perform best? How do you know it performs best?
-* Does performance depend on the problem we are trying to solve? (For example, is it more important to predict the `1`'s, or predict the `0`'s? )
-
-If you do not recommend any of the models, please justify your reasoning.
+- Looking at the results, we can definately say that accuracy of the model increased after resampling the data from 94.42% to 99.59%. (Model 2 performed better than Model 1)
+- Looking at classification report, both models predicted healthy loans with really high accuracy. However, they both had a lower accuracy percentage while predicting default risk loans.
+- Additionally, it is important to identify 1s as 1s(default risking) than having a few 0s(healthy loans) being predicted as 1s(false positives). Hence, our model 2 will be considered better as it correctly predicted 623/625 samples as compared to 558/625 for model 1.
